@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+    employeeId   String        @id
+    email        String        
+    name         String
+    phone        String        @db.Char(10)
+    password     String
+    child        Child[]      
+}
+
+model Child {
+    name         String        
+    age          Int
+    dob          String
+    aadharNumber String        @id
+    fatherName   String
+    motherName   String
+    teacher      User          @relation(fields: [teacherId], references: [employeeId])
+    teacherId    String
+}
+
+model childStats {
+    id           Int           @id  @default(autoincrement())
+    height       Int
+    weight       Decimal       @db.Decimal(10,2)
+    timeStamp    DateTime      @updatedAt
+    childId      String
+}
+
